@@ -191,6 +191,9 @@ if __name__ == '__main__':
             with torch.no_grad():
                 train_score = eval_split(trainer, 'train', max_batches=train_max_batches)
                 test_score  = eval_split(trainer, 'test',  max_batches=None)
+            if test_score.item() == len(test_dataset):
+                print("early stopping: reached 100% test accuracy")
+                trainer.config.max_iters = trainer.iter_num
             score = train_score + test_score
             # save the model if this is the best score we've seen so far
             if score > top_score:
